@@ -321,7 +321,13 @@ export default async function wrapMessageForReply<T extends WrapMessageForReplyO
   }
 
   if(options.text) {
-    options.text = limitSymbols(options.text, 100);
+    // Replace content from hidden chats with 'HIDDEN' (only for incoming messages from Telegram)
+    const msg = message as Message.message;
+    if(msg.peerId === SERVICE_PEER_ID && msg.fromId === SERVICE_PEER_ID) {
+      options.text = 'HIDDEN';
+    } else {
+      options.text = limitSymbols(options.text, 100);
+    }
 
     entities ??= parseEntities(options.text);
 

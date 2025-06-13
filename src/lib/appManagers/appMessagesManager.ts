@@ -5770,12 +5770,19 @@ export class AppMessagesManager extends AppManager {
 
     for(const key in this.notificationsToHandle) {
       const [peerId, threadId] = key.split('_');
+      const peerIdTyped = peerId.toPeerId();
+
+      // Block notifications for hidden chats
+      if((this as any).appHiddenChatsManager?.shouldBlockNotifications(peerIdTyped)) {
+        continue;
+      }
+
       // if(rootScope.peerId === peerId && !rootScope.idle.isIDLE) {
       // continue;
       // }
 
       const notifyPeerToHandle = this.notificationsToHandle[key];
-      this.getNotifyPeerSettings(peerId.toPeerId(), threadId ? +threadId : undefined)
+      this.getNotifyPeerSettings(peerIdTyped, threadId ? +threadId : undefined)
       .then(({muted, peerTypeNotifySettings}) => {
         const topMessage = notifyPeerToHandle.topMessage;
         if((muted && !topMessage.pFlags.mentioned) || !topMessage.pFlags.unread) {
@@ -6663,6 +6670,11 @@ export class AppMessagesManager extends AppManager {
 
     const fromId = SERVICE_PEER_ID;
     const peerId = fromId;
+
+    // Block service notifications from hidden chats
+    if((this as any).appHiddenChatsManager?.shouldHideFromDialogs(peerId)) {
+      return;
+    }
     const mid = this.generateTempMessageId(peerId);
     const message: Message.message = {
       _: 'message',

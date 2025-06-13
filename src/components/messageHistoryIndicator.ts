@@ -29,7 +29,7 @@ export default class MessageHistoryIndicator {
     // Debug: log when indicator is created and what the checks return
     const hasHistory = appMessageHistoryManager.hasMessageHistory(this.message.peerId, this.message.mid);
     const isDeleted = appMessageHistoryManager.getDeletedMessage(this.message.peerId, this.message.mid);
-    console.log('MessageHistoryIndicator', this.message, hasHistory, isDeleted);
+    // console.log('MessageHistoryIndicator', this.message, hasHistory, isDeleted);
 
     this.init();
   }
@@ -42,13 +42,13 @@ export default class MessageHistoryIndicator {
     // For edited messages, ALWAYS show indicator
     const isEdited = (this.message as any).pFlags?.edited || !!(this.message as any).edit_date;
 
-    console.log('MessageHistoryIndicator init:', {
-      messageId: this.message.mid,
-      hasHistory,
-      isDeleted,
-      isEdited,
-      message: this.message
-    });
+    // console.log('MessageHistoryIndicator init:', {
+    //   messageId: this.message.mid,
+    //   hasHistory,
+    //   isDeleted,
+    //   isEdited,
+    //   message: this.message
+    // });
 
     // For edited messages, force create history if it doesn't exist
     if(!hasHistory && isEdited) {

@@ -61,6 +61,7 @@ import {ActiveAccountNumber} from '../accounts/types';
 import {AppManager} from './manager';
 import AppGiftsManager from './appGiftsManager';
 import {AppMessageHistoryManager} from './appMessageHistoryManager';
+import {AppHiddenChatsManager} from './appHiddenChatsManager';
 
 export default function createManagers(
   appStoragesManager: AppStoragesManager,
@@ -121,7 +122,8 @@ export default function createManagers(
     appTranslationsManager: new AppTranslationsManager,
     appGifsManager: new AppGifsManager,
     appGiftsManager: new AppGiftsManager,
-    appMessageHistoryManager: new AppMessageHistoryManager
+    appMessageHistoryManager: new AppMessageHistoryManager,
+    appHiddenChatsManager: new AppHiddenChatsManager
   };
 
   type T = typeof managers;
@@ -151,6 +153,7 @@ export default function createManagers(
     'appNotificationsManager',
     'appMessagesManager',
     'appMessageHistoryManager',
+    'appHiddenChatsManager',
     'dialogsStorage'
   );
   names = filterUnique(names);

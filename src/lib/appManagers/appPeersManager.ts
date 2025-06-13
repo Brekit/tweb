@@ -287,6 +287,11 @@ export class AppPeersManager extends AppManager {
   }
 
   public getPeerSearchText(peerId: PeerId) {
+    // Block search for hidden chats
+    if((this as any).appHiddenChatsManager?.shouldHideFromDialogs(peerId)) {
+      return '';
+    }
+
     let text: string;
     if(this.isUser(peerId)) {
       text = '%pu ' + this.appUsersManager.getUserSearchText(peerId.toUserId());

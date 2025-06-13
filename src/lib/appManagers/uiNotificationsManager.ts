@@ -286,6 +286,10 @@ export class UiNotificationsManager {
     peerTypeNotifySettings,
     isOtherTabActive
   }: NotificationBuildTaskPayload) {
+    // Block notifications for hidden chats
+    if(this.managers.appHiddenChatsManager?.shouldBlockNotifications(message.peerId)) {
+      return;
+    }
     const peerId = message.peerId;
     const isAnyChat = peerId.isAnyChat();
     const notification: NotifyOptions = {};

@@ -225,6 +225,12 @@ export default class AppSearch {
       messages.forEach((message) => {
         try {
           const peerId = this.peerId ? message.fromId : message.peerId;
+
+          // Block search results from hidden chats
+          if((rootScope.managers as any).appHiddenChatsManager?.shouldHideFromDialogs(peerId)) {
+            return;
+          }
+
           appDialogsManager.addDialogAndSetLastMessage({
             peerId: this.fromSavedDialog ? rootScope.myId : peerId,
             container: this.scrollable/* searchGroup.list */,

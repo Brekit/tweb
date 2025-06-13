@@ -1259,6 +1259,11 @@ export default class DialogsStorage extends AppManager {
   }
 
   public canSaveDialog(peerId: PeerId, dialog: Dialog) {
+    // Check if chat is hidden
+    if((this as any).appHiddenChatsManager?.shouldHideFromDialogs(peerId)) {
+      return false;
+    }
+
     if(peerId.isAnyChat()) {
       const chat: Chat = this.appChatsManager.getChat(peerId.toChatId());
       // ! chatForbidden stays for chat where you're kicked

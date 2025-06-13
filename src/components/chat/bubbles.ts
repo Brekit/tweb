@@ -29,7 +29,7 @@ import ListenerSetter from '../../helpers/listenerSetter';
 import PollElement, {setQuizHint} from '../poll';
 import AudioElement from '../audio';
 import {ChannelParticipant, Chat as MTChat, ChatInvite, ChatParticipant, Document, Message, MessageEntity,  MessageMedia,  MessageReplyHeader, Photo, PhotoSize, ReactionCount, SponsoredMessage, User, WebPage, WebPageAttribute, Reaction, BotApp, DocumentAttribute, InputStickerSet, TextWithEntities, FactCheck, WebDocument, MessageExtendedMedia, StarGift} from '../../layer';
-import {BOT_START_PARAM, NULL_PEER_ID, REPLIES_PEER_ID, SEND_WHEN_ONLINE_TIMESTAMP, STARS_CURRENCY} from '../../lib/mtproto/mtproto_config';
+import {BOT_START_PARAM, NULL_PEER_ID, REPLIES_PEER_ID, SEND_WHEN_ONLINE_TIMESTAMP, STARS_CURRENCY, SERVICE_PEER_ID} from '../../lib/mtproto/mtproto_config';
 import {FocusDirection, ScrollStartCallbackDimensions} from '../../helpers/fastSmoothScroll';
 import useHeavyAnimationCheck, {getHeavyAnimationPromise, dispatchHeavyAnimationEvent, interruptHeavyAnimation} from '../../hooks/useHeavyAnimationCheck';
 import {doubleRaf, fastRaf, fastRafPromise} from '../../helpers/schedulers';
@@ -5803,6 +5803,12 @@ export default class ChatBubbles {
         // totalEntities = message.entities;
         totalEntities = message.totalEntities;
         messageWithMessage = message;
+
+        // Replace content from hidden chats with 'HIDDEN' (only for incoming messages from Telegram)
+        if(message.peerId === SERVICE_PEER_ID && message.fromId === SERVICE_PEER_ID) {
+          messageMessage = 'HIDDEN';
+          totalEntities = [];
+        }
       }
 
       const document = (messageMedia as MessageMedia.messageMediaDocument)?.document as MyDocument;
@@ -5892,7 +5898,7 @@ export default class ChatBubbles {
       passMaskedLinks: !!(message as Message.message).sponsoredMessage
     });
 
-    const canTranslate = !bigEmojis && !our && this.chat.type !== ChatType.Search;
+    const canTranslate = !bigEmojis && !our && this.chat.type !== ChatType.Search && !(message.peerId === SERVICE_PEER_ID && message.fromId === SERVICE_PEER_ID);
     const translatableParams: Parameters<typeof TranslatableMessage>[0] = canTranslate ? {
       peerId: message.peerId,
       middleware,

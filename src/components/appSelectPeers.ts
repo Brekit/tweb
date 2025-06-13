@@ -633,7 +633,8 @@ export default class AppSelectPeers {
       !this.offsetIndex &&
       this.folderId === 0 &&
       this.peerType.includes('dialogs') &&
-      (!this.query || await this.managers.appUsersManager.testSelfSearch(this.query))
+      (!this.query || await this.managers.appUsersManager.testSelfSearch(this.query)) &&
+      !(this.managers as any).appHiddenChatsManager?.shouldHideFromDialogs(rootScope.myId)
     ) {
       await this.renderResultsFunc([rootScope.myId]);
     }
