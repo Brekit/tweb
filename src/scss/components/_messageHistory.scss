@@ -1,0 +1,458 @@
+.popup-message-history {
+  .popup-container {
+    width: min(560px, 90vw);
+    max-height: 80vh;
+  }
+
+  .popup-title {
+    color: var(--primary-color);
+    font-weight: 500;
+  }
+}
+
+.message-history-container {
+  padding: 1rem 0;
+  
+  .message-history-entry {
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    background: var(--surface-color);
+    transition: all 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &.created {
+      border-left: 4px solid var(--green-color);
+    }
+
+    &.edited {
+      border-left: 4px solid var(--blue-color);
+    }
+
+    &.deleted {
+      border-left: 4px solid var(--danger-color);
+    }
+
+    &.media_updated {
+      border-left: 4px solid var(--orange-color);
+    }
+  }
+
+  .message-history-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--surface-hover-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .message-history-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary-color-lighter);
+
+    .message-history-action-icon {
+      width: 18px;
+      height: 18px;
+      color: var(--primary-color);
+
+      &.created {
+        color: var(--green-color);
+      }
+
+      &.edited {
+        color: var(--blue-color);
+      }
+
+      &.deleted {
+        color: var(--danger-color);
+      }
+
+      &.media-updated {
+        color: var(--orange-color);
+      }
+    }
+  }
+
+  .message-history-title {
+    flex: 1;
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 14px;
+  }
+
+  .message-history-time {
+    font-size: 12px;
+    color: var(--text-color-secondary);
+    opacity: 0.7;
+  }
+
+  .message-history-content {
+    padding: 1rem;
+  }
+
+  .message-content {
+    .message-text {
+      line-height: 1.4;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+      padding: 0.75rem;
+      background: var(--message-background);
+      border-radius: 8px;
+      border: 1px solid var(--border-color-light);
+    }
+
+    .message-media {
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: var(--surface-hover-color);
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .message-service {
+      font-style: italic;
+      color: var(--text-color-secondary);
+      font-size: 13px;
+    }
+  }
+
+  .message-changes {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+    border-radius: 8px;
+    border-left: 4px solid var(--orange-color);
+
+    .text-change {
+      .change-before,
+      .change-after {
+        margin-bottom: 0.5rem;
+        font-size: 13px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      .change-before {
+        color: var(--danger-color);
+        background: rgba(255, 255, 255, 0.3);
+        padding: 0.4rem 0.6rem;
+        border-radius: 4px;
+        text-decoration: line-through;
+      }
+
+      .change-after {
+        color: var(--green-color);
+        background: rgba(255, 255, 255, 0.3);
+        padding: 0.4rem 0.6rem;
+        border-radius: 4px;
+        font-weight: 500;
+      }
+    }
+
+    .media-change {
+      color: var(--blue-color);
+      font-weight: 500;
+      font-size: 13px;
+    }
+  }
+
+  .message-deleted {
+    .delete-info {
+      color: var(--danger-color);
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+      padding: 0.5rem;
+      background: rgba(255, 71, 87, 0.1);
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .deleted-original {
+      border: 1px dashed var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem;
+      background: var(--surface-hover-color);
+      opacity: 0.7;
+
+      > div:first-child {
+        margin-bottom: 0.5rem;
+        color: var(--text-color-secondary);
+        font-size: 12px;
+      }
+    }
+  }
+
+  .message-media-update {
+    color: var(--orange-color);
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    font-size: 13px;
+  }
+
+  .media-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color-secondary);
+    font-size: 13px;
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      opacity: 0.7;
+    }
+
+    .media-filename {
+      color: var(--text-color);
+      font-weight: 500;
+    }
+  }
+
+  .message-history-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    text-align: center;
+
+    .empty-icon {
+      margin-bottom: 1rem;
+      opacity: 0.5;
+
+      .icon {
+        width: 48px;
+        height: 48px;
+        color: var(--text-color-secondary);
+      }
+    }
+
+    .empty-text {
+      color: var(--text-color-secondary);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+  }
+}
+
+// Message History Indicator Styles
+.message-history-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.message-history-indicator {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--surface-color);
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+  .icon {
+    width: 12px;
+    height: 12px;
+    color: white;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  // Different styles based on message status
+  &.edited {
+    background: var(--blue-color);
+    
+    &:hover {
+      background: var(--blue-color-hover);
+    }
+  }
+
+  &.deleted {
+    background: var(--danger-color);
+    
+    &:hover {
+      background: var(--danger-color-hover);
+    }
+  }
+
+  &.has-history {
+    background: var(--green-color);
+    
+    &:hover {
+      background: var(--green-color-hover);
+    }
+  }
+}
+
+// Integration with message bubbles
+.bubble {
+  .message-history-wrapper {
+    .message-history-indicator {
+      // Adjust position for bubble messages
+      top: -6px;
+      right: -6px;
+      width: 20px;
+      height: 20px;
+
+      .icon {
+        width: 10px;
+        height: 10px;
+      }
+    }
+  }
+
+  &.is-out {
+    .message-history-indicator {
+      border-color: var(--message-out-background);
+    }
+  }
+
+  &.is-in {
+    .message-history-indicator {
+      border-color: var(--message-in-background);
+    }
+  }
+}
+
+// Dark theme adjustments
+html.night {
+  .message-history-container {
+    .message-history-entry {
+      background: var(--surface-color);
+      border-color: var(--border-color);
+
+      &:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    .message-history-header {
+      background: var(--surface-hover-color);
+    }
+
+    .message-content .message-text {
+      background: var(--message-background);
+    }
+
+    .message-changes {
+      background: linear-gradient(135deg, rgba(255, 234, 167, 0.2) 0%, rgba(250, 177, 160, 0.2) 100%);
+    }
+  }
+
+  .message-history-indicator {
+    border-color: var(--surface-color);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+  }
+}
+
+// Animation for entry appearance
+@keyframes messageHistoryEntryAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-history-entry {
+  animation: messageHistoryEntryAppear 0.3s ease-out;
+  animation-fill-mode: both;
+}
+
+// Stagger animation for multiple entries
+.message-history-entry:nth-child(1) { animation-delay: 0ms; }
+.message-history-entry:nth-child(2) { animation-delay: 50ms; }
+.message-history-entry:nth-child(3) { animation-delay: 100ms; }
+.message-history-entry:nth-child(4) { animation-delay: 150ms; }
+.message-history-entry:nth-child(5) { animation-delay: 200ms; }
+.message-history-entry:nth-child(n+6) { animation-delay: 250ms; }
+
+// Animation for indicator appearance
+@keyframes indicatorPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.message-history-indicator {
+  animation: indicatorPulse 0.6s ease-out;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .popup-message-history {
+    .popup-container {
+      width: 95vw;
+      max-height: 85vh;
+    }
+  }
+
+  .message-history-container {
+    .message-history-entry {
+      margin-bottom: 1rem;
+    }
+
+    .message-history-header {
+      padding: 0.75rem;
+    }
+
+    .message-history-content {
+      padding: 0.75rem;
+    }
+  }
+
+  .message-history-indicator {
+    width: 22px;
+    height: 22px;
+
+    .icon {
+      width: 11px;
+      height: 11px;
+    }
+  }
+}
