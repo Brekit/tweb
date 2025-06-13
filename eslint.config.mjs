@@ -158,4 +158,14 @@ export default [{
       project: ['./tsconfig.json']
     }
   }
+}, {
+  files: ['src/scripts/**/*.js'],
+  languageOptions: {
+    parserOptions: {
+      project: null
+    }
+  },
+  rules: {
+    '@typescript-eslint/await-thenable': 'off'
+  }
 }];

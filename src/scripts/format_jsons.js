@@ -5,20 +5,20 @@
  * https://github.com/morethanwords/tweb/blob/master/LICENSE
  */
 
-let emoji = require('./in/emoji_pretty.json');
-//let countries = require('./countries_pretty.json');
+const emoji = require('./in/emoji_pretty.json');
+// let countries = require('./countries_pretty.json');
 
 // let countries = require('fs').readFileSync('./in/countries.dat').toString();
-let countries = require('./in/countries.mtproto.json');
-//console.log(countries);
+const countries = require('./in/countries.mtproto.json');
+// console.log(countries);
 
-//console.log(emoji, countries);
+// console.log(emoji, countries);
 
 const path = process.argv[2];
 const writePathTo = (/* path ||  */__dirname + '/out/');
 console.log('Writing to:', writePathTo);
 
-let formatted = emoji.filter(e => e.has_img_apple);
+const formatted = emoji.filter(e => e.has_img_apple);
 
 function encodeEmoji(emojiText) {
   const codepoints = toCodePoints(removeVS16s(emojiText)).join('-');
@@ -41,7 +41,7 @@ function toCodePoints(unicodeSurrogates) {
     if(previous) {
       points.push((0x10000 + ((previous - 0xd800) << 10) + (char - 0xdc00)).toString(16));
       previous = 0;
-    } else if (char > 0xd800 && char <= 0xdbff) {
+    } else if(char > 0xd800 && char <= 0xdbff) {
       previous = char;
     } else {
       points.push(char.toString(16));
@@ -57,7 +57,7 @@ function toCodePoints(unicodeSurrogates) {
 
 /* formatted = formatted.map(e => {
   let {unified, name, short_names, category, sheet_x, sheet_y} = e;
-  
+
   return {
     unified,
     //name,
@@ -71,45 +71,45 @@ function toCodePoints(unicodeSurrogates) {
 require('fs').writeFileSync('./emoji.json', JSON.stringify(formatted)); */
 
 if(false) {
-  let obj = {};
+  const obj = {};
   formatted.forEach(e => {
-    let {unified, name, short_names, category, sheet_x, sheet_y, sort_order} = e;
-    
-    let emoji = unified.split('-')
+    const {unified, name, short_names, category, sheet_x, sheet_y, sort_order} = e;
+
+    const emoji = unified.split('-')
     .reduce((prev, curr) => prev + String.fromCodePoint(parseInt(curr, 16)), '');
-    
+
     obj[/* unified */emoji] = {
-      //unified,
-      //name,
-      //short_names,
+      // unified,
+      // name,
+      // short_names,
       category,
       sheet_x,
       sheet_y,
       sort_order
     };
   });
-  
+
   require('fs').writeFileSync('./out/emoji.json', JSON.stringify(obj));
 }
 
 {
-  let categories = {
-    "Smileys & Emotion": 1
-    , "People & Body": 1
-    , "Animals & Nature": 2
-    , "Food & Drink": 3
-    , "Travel & Places": 4
-    , "Activities": 5
-    , "Objects": 6
-    , "Symbols": 6
-    , "Flags": 7
-    , "Skin Tones": 8
+  const categories = {
+    'Smileys & Emotion': 1,
+    'People & Body': 1,
+    'Animals & Nature': 2,
+    'Food & Drink': 3,
+    'Travel & Places': 4,
+    'Activities': 5,
+    'Objects': 6,
+    'Symbols': 6,
+    'Flags': 7,
+    'Skin Tones': 8
   };
 
-  let concatCategories = [['Objects', 'Symbols'], ['Smileys & Emotion', 'People & Body']];
-  let maxIndexes = {};
+  const concatCategories = [['Objects', 'Symbols'], ['Smileys & Emotion', 'People & Body']];
+  const maxIndexes = {};
 
-  let maxObjectsIndex = -1;
+  const maxObjectsIndex = -1;
   formatted.forEach(e => {
     if(concatCategories.findIndex(c => c[0] == e.category) === -1) return;
 
@@ -119,7 +119,7 @@ if(false) {
     }
   });
   formatted.forEach(e => {
-    let concatDetails = concatCategories.find(c => c[1] == e.category);
+    const concatDetails = concatCategories.find(c => c[1] == e.category);
     if(!concatDetails) return;
 
     e.sort_order += maxIndexes[concatDetails[0]];
@@ -127,37 +127,37 @@ if(false) {
 
   formatted.forEach(e => {
     if(e.skin_variations) {
-      for(let i in e.skin_variations) {
+      for(const i in e.skin_variations) {
         formatted.push(e.skin_variations[i]);
       }
     }
   });
 
-  let obj = {};
+  const obj = {};
   if(false/*  || true */) formatted.forEach(e => {
-    let {unified, name, short_names, category, sheet_x, sheet_y, sort_order} = e;
+    const {unified, name, short_names, category, sheet_x, sheet_y, sort_order} = e;
 
-    let emoji = unified/* .replace(/-FE0F/gi, '') */.split('-')
+    const emoji = unified/* .replace(/-FE0F/gi, '') */.split('-')
     .reduce((prev, curr) => prev + String.fromCodePoint(parseInt(curr, 16)), '');
 
-    //emoji = emoji.replace(/[\ufe0f\u200d]/g, '');
-    
-    let c = categories[category] === undefined ? 9 : categories[category];
-    //obj[emoji] = '' + c + sort_order;
-    //obj[emoji] = +('' + (c * 1000 + sort_order)).replace(/0+/g, '0').replace(/^(\d)0(\d)/g, '$1$2');
+    // emoji = emoji.replace(/[\ufe0f\u200d]/g, '');
+
+    const c = categories[category] === undefined ? 9 : categories[category];
+    // obj[emoji] = '' + c + sort_order;
+    // obj[emoji] = +('' + (c * 1000 + sort_order)).replace(/0+/g, '0').replace(/^(\d)0(\d)/g, '$1$2');
     obj[emoji] = e.sort_order !== undefined ? +('' + c + sort_order) : 0;
   });
 
   const migrateFromVersion = 13.1;
   if(true) formatted.forEach(e => {
-    let {unified, name, short_names, category, sheet_x, sheet_y, sort_order, added_in} = e;
+    const {unified, name, short_names, category, sheet_x, sheet_y, sort_order, added_in} = e;
 
     let emoji = unified.split('-')
     .reduce((prev, curr) => prev + String.fromCodePoint(parseInt(curr, 16)), '');
 
     emoji = encodeEmoji(emoji);
     emoji = emoji.replace(/-?fe0f/g, '');
-    //emoji = emoji.replace(/-?fe0f$/, '');
+    // emoji = emoji.replace(/-?fe0f$/, '');
 
     let _obj = obj;
     if(migrateFromVersion) {
@@ -165,15 +165,15 @@ if(false) {
       const key = migrateFromVersion >= version ? '' : version;
       _obj = obj[key] ?? (obj[key] = {});
     }
-    
-    let c = categories[category] === undefined ? 9 : categories[category];
-    //obj[emoji] = '' + c + sort_order;
-    //obj[emoji] = +('' + (c * 1000 + sort_order)).replace(/0+/g, '0').replace(/^(\d)0(\d)/g, '$1$2');
+
+    const c = categories[category] === undefined ? 9 : categories[category];
+    // obj[emoji] = '' + c + sort_order;
+    // obj[emoji] = +('' + (c * 1000 + sort_order)).replace(/0+/g, '0').replace(/^(\d)0(\d)/g, '$1$2');
     _obj[emoji] = e.sort_order !== undefined ? +('' + c + sort_order) : 0;
   });
 
   console.log(obj);
-  
+
   require('fs').writeFileSync(writePathTo + 'emoji.json', JSON.stringify(obj));
 }
 
@@ -181,20 +181,20 @@ if(false) {
   let obj = {};
   formatted.forEach(e => {
     let {unified, name, short_names, category, sheet_x, sheet_y} = e;
-    
-    
-    let categories = ["Smileys & People", "Animals & Nature", "Food & Drink", 
+
+
+    let categories = ["Smileys & People", "Animals & Nature", "Food & Drink",
     "Travel & Places", "Activities", "Objects", "Symbols", "Flags", "Skin Tones"];
     let categoryId = categories.findIndex(c => c == category);
     if(categoryId === -1) throw new Error(category);
-    
+
     obj[unified] = [
       sheet_x,
       sheet_y,
       categoryId
     ];
   });
-  
+
   require('fs').writeFileSync('./emoji.json', JSON.stringify(obj));
 } */
 
@@ -203,10 +203,10 @@ if(false) {
 //   let arr = [];
 //   /* countries.forEach(e => {
 //     let {name, code, phoneCode} = e;
-    
+
 //     arr.push([name, code, phoneCode]);
 //   }); */
-  
+
 //   const lines = countries.split('\n');
 //   const data2 = [];
 //   lines.forEach(x => {
@@ -224,7 +224,7 @@ if(false) {
 //     arr.push(item);
 //     //console.log(item);
 //   });
-  
+
 //   require('fs').writeFileSync(writePathTo + 'countries.json', JSON.stringify(arr));
 // }
 

@@ -1,6 +1,6 @@
 {
   const perf = performance.now();
-  appUsersManager.storage.storage.getAll().then(values => { 
+  appUsersManager.storage.storage.getAll().then(values => {
     console.log('getAll', performance.now() - perf);
   });
 
@@ -20,7 +20,7 @@
   appUsersManager.storage.set(users);
   appStorage.storage.set('users', users);
 
-  const types = {}; 
+  const types = {};
   appStateManager.neededPeers.forEach((value, key) => {
     [...value].forEach(type => {
       if(!types[type]) types[type] = [];

@@ -20,7 +20,7 @@ https.get('https://translations.telegram.org/en/webk/export', (response) => {
 
     ['lang', 'langSign'].forEach((part) => {
       const path = `../${part}.ts`;
-    
+
       let lang = fs.readFileSync(path).toString();
 
       const plural = {};
@@ -30,7 +30,7 @@ https.get('https://translations.telegram.org/en/webk/export', (response) => {
           // console.log('lol', line);
           return;
         }
-  
+
         const key = match[1];
         const value = match[2].replace(/'/g, `\\'`).replace(/\\"/g, '"');
         if(key.includes('_') && ignore.has(key.split('_').pop())) {
@@ -56,6 +56,6 @@ https.get('https://translations.telegram.org/en/webk/export', (response) => {
       fs.writeFileSync(path, lang);
     });
   });
-}).on("error", (err) => {
-  console.log("Error: " + err.message);
+}).on('error', (err) => {
+  console.log('Error: ' + err.message);
 });

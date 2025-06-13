@@ -60,6 +60,7 @@ import AppGifsManager from './appGifsManager';
 import {ActiveAccountNumber} from '../accounts/types';
 import {AppManager} from './manager';
 import AppGiftsManager from './appGiftsManager';
+import {AppMessageHistoryManager} from './appMessageHistoryManager';
 
 export default function createManagers(
   appStoragesManager: AppStoragesManager,
@@ -119,7 +120,8 @@ export default function createManagers(
     appBusinessManager: new AppBusinessManager,
     appTranslationsManager: new AppTranslationsManager,
     appGifsManager: new AppGifsManager,
-    appGiftsManager: new AppGiftsManager
+    appGiftsManager: new AppGiftsManager,
+    appMessageHistoryManager: new AppMessageHistoryManager
   };
 
   type T = typeof managers;
@@ -148,6 +150,7 @@ export default function createManagers(
     'appChatsManager',
     'appNotificationsManager',
     'appMessagesManager',
+    'appMessageHistoryManager',
     'dialogsStorage'
   );
   names = filterUnique(names);

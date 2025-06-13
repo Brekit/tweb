@@ -120,6 +120,7 @@ import {BatchProcessor} from '../../helpers/sortedList';
 import wrapUrl from '../../lib/richTextProcessor/wrapUrl';
 import getMessageThreadId from '../../lib/appManagers/utils/messages/getMessageThreadId';
 import wrapTopicNameButton from '../wrappers/topicNameButton';
+import MessageHistoryIndicator from '../messageHistoryIndicator';
 import wrapMediaSpoiler, {onMediaSpoilerClick} from '../wrappers/mediaSpoiler';
 import {copyTextToClipboard} from '../../helpers/clipboard';
 import liteMode from '../../helpers/liteMode';
@@ -817,6 +818,19 @@ export default class ChatBubbles {
         reverse: true,
         bubble
       });
+
+      // Update message history indicator after edit
+      setTimeout(() => {
+        const existingIndicator = bubble.querySelector('.message-history-indicator');
+        if(existingIndicator) {
+          existingIndicator.remove();
+        }
+
+        new MessageHistoryIndicator({
+          message: message as any,
+          container: bubble
+        });
+      }, 100);
     });
 
     this.listenerSetter.add(rootScope)('message_error', async({storageKey, tempId, peerId}) => {
@@ -3511,7 +3525,8 @@ export default class ChatBubbles {
     .sort((a, b) => (indexes[a] ?? 0) - (indexes[b] ?? 0))
     .forEach((fullMid) => {
       const bubble = this.getBubble(fullMid);
-      this.destroyBubble(bubble, permanent && liteMode.isAvailable('animations'));
+      // Instead of destroying, mark as deleted
+      this.markBubbleAsDeleted(bubble, fullMid);
     });
 
     this.scrollable.ignoreNextScrollEvent();
@@ -3531,6 +3546,65 @@ export default class ChatBubbles {
       this.scrollable.onScroll();
       // this.onScroll();
     }
+  }
+
+  private markBubbleAsDeleted(bubble: HTMLElement, fullMid: FullMid) {
+    // Don't mark already deleted bubbles
+    if(bubble.classList.contains('message-deleted')) {
+      return;
+    }
+
+    // Add deleted class for styling
+    bubble.classList.add('message-deleted');
+
+    // Find message content and modify it
+    const messageDiv = bubble.querySelector('.message');
+    if(messageDiv) {
+      // Add deleted indicator
+      const deletedIndicator = document.createElement('div');
+      deletedIndicator.className = 'message-deleted-indicator';
+      deletedIndicator.innerHTML = '🗑️ <span>This message was deleted</span>';
+
+      // Make original content semi-transparent and crossed out
+      const originalContent = messageDiv.querySelector('.message-content, .bubble-content');
+      if(originalContent) {
+        (originalContent as HTMLElement).style.opacity = '0.6';
+        (originalContent as HTMLElement).style.textDecoration = 'line-through';
+        (originalContent as HTMLElement).style.filter = 'grayscale(50%)';
+      }
+
+      // Insert deleted indicator at the top
+      messageDiv.prepend(deletedIndicator);
+    }
+
+    // Update message history - add deletion entry
+    const {peerId, mid} = splitFullMid(fullMid);
+    const message = this.chat.getMessage(fullMid);
+    if(message) {
+      // Record deletion in message history
+      const messageHistoryManager = this.managers.appMessageHistoryManager as any;
+      if(messageHistoryManager.recordMessageHistory) {
+        messageHistoryManager.recordMessageHistory(peerId, mid, 'deleted', {
+          originalMessage: message,
+          isRevoked: false
+        });
+      }
+
+      // Update or create history indicator
+      setTimeout(() => {
+        const existingIndicator = bubble.querySelector('.message-history-indicator');
+        if(existingIndicator) {
+          existingIndicator.remove();
+        }
+
+        new MessageHistoryIndicator({
+          message: message as any,
+          container: bubble
+        });
+      }, 100);
+    }
+
+    console.log('Message marked as deleted:', fullMid);
   }
 
   private pollExtendedMediaMessages() {
@@ -5911,6 +5985,20 @@ export default class ChatBubbles {
     }
 
     bubbleContainer.prepend(messageDiv);
+
+    // Add message history indicator if needed
+    if(message._ === 'message' || message._ === 'messageService') {
+      // Ensure message has history entry
+      const managers = this.managers;
+      if(!managers.appMessageHistoryManager.hasMessageHistory(message.peerId, message.mid)) {
+        managers.appMessageHistoryManager.forceCreateHistory(message as any);
+      }
+
+      new MessageHistoryIndicator({
+        message: message as any, // MyMessage
+        container: bubble
+      });
+    }
 
     let topicNameButtonContainer: HTMLElement;
     if(isMessage && (this.chat.isAllMessagesForum || (this.chat.hashtagType === 'my' && isOut))) {

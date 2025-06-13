@@ -36,7 +36,7 @@ function deleteFolderRecursive(directoryPath) {
     // Remove now-empty directory
     fs.rmdirSync(directoryPath);
   } else {
-    console.error("Directory path " + directoryPath + " not found.");
+    console.error('Directory path ' + directoryPath + ' not found.');
   }
 }
 

@@ -41,7 +41,7 @@ const sort = (codepoints) => {
         return diff;
       }
     }
-  
+
     return a.length - b.length;
   });
 };
@@ -78,7 +78,7 @@ const makeGroup = (arr, j) => {
 };
 
 let str = '(?:';
-let groups = [];
+const groups = [];
 /* codepointsByLength.forEach((value) => {
   sort(value);
 
@@ -98,7 +98,7 @@ let groups = [];
 //       for(let k = i + 1; k < codepoints.length; ++k) {
 //         const b = codepoints[k];
 //         const e = b.slice(j);
-    
+
 //         if(isEqualArray(ending, e)) {
 //           codepoints.splice(k, 1);
 //           set.push(b);
@@ -115,7 +115,7 @@ let groups = [];
 //     } else {
 //       set.push(a);
 //     }
-    
+
 //     let group = makeGroup(set, j);
 //     group += ending.map(ttt).join('');
 //     groups.push(group);
@@ -131,12 +131,12 @@ for(let i = 0; i < codepoints.length; ++i) {
   const a = codepoints[i];
 
   for(let j = i + 1; j < codepoints.length; ++j) {
-    
+
   }
 }
 str += ')';
 
-//console.log(codepointsByLength.get(1));
+// console.log(codepointsByLength.get(1));
 
 console.log(str);
 
@@ -153,4 +153,4 @@ for(; i < codepoints.length; ++i) {
     s.push(c[0]);
   }
 } */
-//console.log(codepoints);
+// console.log(codepoints);

@@ -101,6 +101,7 @@ export type BroadcastEvents = {
   'messages_read': void,
   'messages_downloaded': {peerId: PeerId, mids: number[]},
   'messages_media_read': {peerId: PeerId, mids: number[]},
+  'messages_deleted': {peerId: PeerId, mids: number[], isRevoked?: boolean},
 
   'story_update': {peerId: PeerId, story: StoryItem, modifiedPinned?: boolean, modifiedArchive?: boolean, modifiedPinnedToTop?: boolean},
   'story_deleted': {peerId: PeerId, id: number},

@@ -4,7 +4,7 @@
  * https://github.com/morethanwords/tweb/blob/master/LICENSE
  */
 
-let json = require(__dirname + '/in/schema');
+const json = require(__dirname + '/in/schema');
 
 let top = {};
 /* ['MTProto', 'API'].forEach(key => {
@@ -39,7 +39,7 @@ function uintToInt(val) {
 }
 
 ['MTProto', 'API'].forEach(key => {
-  let schema = json[key];
+  const schema = json[key];
 
   ['constructors', 'methods'].forEach(key => {
     schema[key].forEach(smth => {
@@ -50,8 +50,8 @@ function uintToInt(val) {
     });
   });
 
-  //console.log(out);
-  //process.exit(0);
+  // console.log(out);
+  // process.exit(0);
 });
 top = json;
 
@@ -78,6 +78,6 @@ top = json;
   //process.exit(0);
 }); */
 
-//console.log(out);
+// console.log(out);
 
 require('fs').writeFileSync(__dirname + '/out/schema.json', JSON.stringify(top/* , null, '\t' */));
